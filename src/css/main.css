@@ -1,6 +1,20 @@
 html {
     text-align: center;
 }
+header {
+    height: 50px;
+    background-color: #edf2f4;
+}
+ul {
+    padding-top: 15px;
+}
+
+canvas{
+    position:absolute;
+    left:0;
+    top:0;
+    z-index:-1;
+  }
 
 footer {
     position: fixed;
