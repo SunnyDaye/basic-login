@@ -5,6 +5,16 @@
         },
         "color":{
             "value": "#000"
+        },
+        "opacity": {
+            "value": 0.2
+        },
+        "size":{
+            "value": 3
+        },
+        "line_linked": {
+            "enable": true,
+            "color": "#000"
         }
     }
 }
