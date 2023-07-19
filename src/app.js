@@ -1,14 +1,15 @@
+const path = require('path');
 const express = require("express");
 const app = express();
 
 
 app.set('view engine', 'ejs');
-
-app.use(express.static(__dirname));
+app.set('views', path.join(__dirname,'views'));
+app.use(express.static(path.join(__dirname)));
 app.use(express.json());
 
 app.get('/',(req,res) => {
-    res.status(200).json("Hello World!");
+    res.render('index');
 });
 
 //TODO: Implement not found handler
