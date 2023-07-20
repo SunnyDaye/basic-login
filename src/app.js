@@ -1,8 +1,20 @@
 const path = require('path');
 const express = require("express");
+const { Client } = require('pg');
+const {CONNECTION_URL} = process.env;
 const app = express();
 
+console.log(CONNECTION_URL);
+const database = new Client({
+    connectionString:CONNECTION_URL,
+});
 
+database.connect();
+
+database.query('SELECT * FROM users', (err, res) => {
+    console.log(err, res);
+    database.end();
+})
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname,'views'));
 app.use(express.static(path.join(__dirname)));
