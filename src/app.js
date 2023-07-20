@@ -15,7 +15,19 @@ app.get('/',(req,res) => {
 
 app.get('/register', (req,res) => {
     res.render('register');
+});
+
+app.post('/register', (req, res) => {
+    res.json(req.body);
 })
+
+app.get('/login', (req,res) => {
+    res.render('login');
+});
+
+app.get('/dashboard', (req,res) => {
+    res.render('dashboard');
+});
 
 //TODO: Implement not found handler
 app.use((req, res, next) => {
