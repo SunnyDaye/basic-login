@@ -1,18 +1,56 @@
 <%- include("partials/header") %>
-<h1>Registration</h1>
-<form>
-    <label for="first-name">First Name:
-        <input type="text" name="first-name" id="first-name" required>
-    </label>
-    <label for="last-name">Last Name:
-        <input type="text" name="last-name" id="last-name" required>
-    </label>
-    <label for="email">Email:
-        <input type="text" name="email" id="email" required>
-    </label>
-    <label for="password">Password:
-        <input type="text" name="password" id="password" required>
-    </label>
-    <input type="submit">
-</form>
+
+<div class="form-card card mx-auto">
+  <div class="card-body">
+    <h1 class="card-title">Registration</h1>
+    <form class="mx-auto" method="post">
+      <div class="form-floating mb-3">
+        <input
+          type="text"
+          class="form-control"
+          id="floatingFirstName"
+          placeholder="First Name"
+          pattern="[A-Z]{1}[a-z]{1,30}"
+        />
+        <label for="floatingFirstName">First name</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input
+          type="text"
+          class="form-control"
+          id="floatingLastName"
+          placeholder="Last Name"
+          pattern="[A-Z]{1}[a-z]{1,30}"
+        />
+        <label for="floatingLastName">Last name</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input
+          type="email"
+          class="form-control"
+          id="floatingInput"
+          placeholder="name@example.com"
+          pattern="/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/"
+        />
+        <label for="floatingInput">Email address</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input
+          type="password"
+          class="form-control"
+          id="floatingPassword"
+          placeholder="Password"
+          pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+        />
+        <p>Your password must contain a minimum of 8 characters, atleast one uppercase letter,
+            atleast one lowercase letter, atleast one number, and atleast one special character
+        </p>
+        <label for="floatingPassword">Password</label>
+      </div>
+
+      <input class="submit btn btn-primary" type="submit" value="Submit" />
+    </form>
+  </div>
+</div>
+
 <%- include("partials/footer") %>

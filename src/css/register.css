@@ -1,0 +1,17 @@
+.form-card {
+    width: max-content;
+    padding: 15px;
+    margin-top: 300px;
+    background: #eee;
+}
+form {
+    display: flex;
+    flex-direction: column;
+    width:300px;
+}
+
+.submit {
+    margin: 10px auto;
+    width: 100px;
+    height: 50px;
+}
