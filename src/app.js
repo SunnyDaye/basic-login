@@ -2,6 +2,7 @@ const path = require('path');
 const express = require("express");
 const { Client } = require('pg');
 const {CONNECTION_URL} = process.env;
+const queries = require('./queries/queries');
 const app = express();
 
 console.log(CONNECTION_URL);
@@ -11,9 +12,10 @@ const database = new Client({
 
 database.connect();
 
-database.query('SELECT * FROM users', (err, res) => {
+
+
+database.query(queries.selectAllUsers(), (err, res) => {
     console.log(err, res);
-    database.end();
 })
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname,'views'));
@@ -30,8 +32,12 @@ app.get('/register', (req,res) => {
 });
 
 app.post('/register', (req, res) => {
-    res.json(req.body);
-})
+    const values = [...Object.values(req.body)];
+    database.query(queries.insertUser(values), (err,res) => {
+        console.log(err, res);
+    });
+    res.json(values);
+});
 
 app.get('/login', (req,res) => {
     res.render('login');
