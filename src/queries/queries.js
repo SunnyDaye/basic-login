@@ -7,7 +7,7 @@ const selectAllUsers = () => {
 const insertUser = (values) => {
 
     return {
-        text: 'INSERT INTO users(firstname,lastname,email,password) VALUES($1,$2,$3,$4)',
+        text: 'INSERT INTO users(first_name,last_name,email,password) VALUES($1,$2,$3,$4)',
         values
     }
 }
