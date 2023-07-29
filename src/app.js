@@ -5,7 +5,7 @@ const {CONNECTION_URL} = process.env;
 const queries = require('./queries/queries');
 const app = express();
 
-console.log(CONNECTION_URL);
+
 const database = new Client({
     connectionString:CONNECTION_URL,
 });
@@ -28,15 +28,25 @@ app.get('/',(req,res) => {
 });
 
 app.get('/register', (req,res) => {
-    res.render('register');
+    res.render('register',{error:null});
 });
 
 app.post('/register', (req, res) => {
     const values = [...Object.values(req.body)];
-    database.query(queries.insertUser(values), (err,res) => {
-        console.log(err, res);
+    database.query(queries.insertUser(values), (err,data) => {
+        
+        if(err){
+            let error = "Something failed on our end! Please try again.";
+            if(err.code === '23505'){
+                error = "That email is already taken. Please try another.";
+            }
+            console.log(error);
+            return res.render("register", {error: error});
+        }else{
+            return res.redirect("/dashboard"); 
+        }
     });
-    res.json(values);
+    
 });
 
 app.get('/login', (req,res) => {
