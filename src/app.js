@@ -46,6 +46,22 @@ app.get("/login", (req, res) => {
   res.render("login");
 });
 
+app.post("/login", (req, res, next) => {
+  const {email,password} = req.body;
+
+  database.query(queries.getUser(email), (err,data) => {
+    console.log(err,data);
+    // if(err){
+    //   next({status: 400, message: "Incorrect username or password"});
+    // }else{
+    //   res.status(200).json({loginSuccess: true});
+    // }
+    return data;
+  }).then(user => res.json({}))
+    .catch(err => console.log(err));
+  
+});
+
 app.get("/dashboard", (req, res) => {
   res.render("dashboard");
 });
