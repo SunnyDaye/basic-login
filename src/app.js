@@ -51,14 +51,13 @@ app.post("/login", (req, res, next) => {
 
   database.query(queries.getUser(email), (err,data) => {
     console.log(err,data);
-    // if(err){
-    //   next({status: 400, message: "Incorrect username or password"});
-    // }else{
-    //   res.status(200).json({loginSuccess: true});
-    // }
-    return data;
-  }).then(user => res.json({}))
-    .catch(err => console.log(err));
+    if(err || (data && data.rows.length === 0) || (data && password !== data.rows[0].password)){
+      next({status: 400, message: "Incorrect username or password"});
+    }else{
+      res.status(200).json({loginSuccess: true});
+    }
+  });
+    
   
 });
 

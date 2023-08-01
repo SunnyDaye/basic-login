@@ -2,15 +2,15 @@
 <div class="login-card card mx-auto">
     <div class="card-body">
         <h1 class="card-title">Login</h1>
-        <form action="post" class="mx-auto">
+        <form action="post" class="login-form mx-auto">
             <div class="form-floating mb-3">
                 <input
                   type="email"
                   class="form-control"
-                  id="floatingInput"
+                  id="floatingEmail"
                   placeholder="name@example.com"
                 />
-                <label for="floatingInput">Email address</label>
+                <label for="floatingEmail">Email address</label>
               </div>
               <div class="form-floating mb-3">
                 <input
@@ -21,9 +21,40 @@
                 />
                 <label for="floatingPassword">Password</label>
               </div>
+                <div class="login-form-feedback"></div>
                 <input class="submit btn btn-primary" type="submit" value="Submit">
         </form>
     </div>
 
 </div>
+<script>
+  const loginForm = document.querySelector('.login-form');
+
+  loginForm.addEventListener('submit', event => {
+    event.preventDefault();
+
+    const email = document.getElementById('floatingEmail').value;
+    const password = document.getElementById('floatingPassword').value;
+    const data = {email, password};
+
+    fetch('/login',{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      .then(res => res.json())
+      .then(data => {
+        if(data.error){
+          document.getElementById('floatingEmail').classList.add('is-invalid');
+          document.getElementById('floatingPassword').classList.add('is-invalid');
+          document.querySelector('.login-form-feedback').innerHTML = data.error;
+        }else{
+          window.location.replace("/dashboard");
+        }
+      })
+      .catch(err => console.log(err));
+  });
+</script>
 <%- include("partials/footer") %>

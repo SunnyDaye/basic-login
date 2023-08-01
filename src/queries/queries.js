@@ -14,7 +14,7 @@ const insertUser = (values) => {
 
 const getUser = (email) => {
     return {
-        text: `SELECT email, password FROM users WHERE email = ${email};`
+        text: `SELECT email, password FROM users WHERE email = '${email}';`
     };
 }
 
