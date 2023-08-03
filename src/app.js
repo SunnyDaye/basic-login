@@ -4,6 +4,8 @@ const { Client } = require("pg");
 const { CONNECTION_URL } = process.env;
 const queries = require("./queries/queries");
 const app = express();
+const sessions = require("client-sessions");
+const { SECRET } = prcoess.env;
 
 const database = new Client({
   connectionString: CONNECTION_URL,
@@ -16,6 +18,13 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname)));
 app.use(express.json());
+
+//Session management middleware
+app.use(sessions({
+  cookieName: "session",
+  secret: SECRET,
+  duration: 60 * 1000 //1 minute
+}));
 
 app.get("/", (req, res) => {
   res.render("index");
@@ -54,6 +63,7 @@ app.post("/login", (req, res, next) => {
     if(err || (data && data.rows.length === 0) || (data && password !== data.rows[0].password)){
       next({status: 400, message: "Incorrect username or password"});
     }else{
+      req.session.userId = data.rows[0].user_id;
       res.status(200).json({loginSuccess: true});
     }
   });
@@ -61,8 +71,22 @@ app.post("/login", (req, res, next) => {
   
 });
 
-app.get("/dashboard", (req, res) => {
-  res.render("dashboard");
+app.get("/dashboard", (req, res, next) => {
+  if(!(req.session && req.session.userId)){
+    res.redirect('/login');
+  }else{
+    database.query(queries.getUserById(req.session.userId), (err,data) => {
+      if(err){
+        next();
+      }
+      if(data.rows[0].length === 0){
+        res.redirect('/login');
+      }else{
+        res.render("dashboard");
+      }
+    });
+  }
+  
 });
 
 //TODO: Implement not found handler

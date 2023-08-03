@@ -14,12 +14,19 @@ const insertUser = (values) => {
 
 const getUser = (email) => {
     return {
-        text: `SELECT email, password FROM users WHERE email = '${email}';`
+        text: `SELECT user_id, email, password FROM users WHERE email = '${email}';`
+    };
+}
+
+const getUserById = (id) => {
+    return {
+        text: `SELECT user_id, first_name, last_name FROM users WHERE user_id = '${id}';`
     };
 }
 
 module.exports = {
     selectAllUsers,
     insertUser,
-    getUser
+    getUser,
+    getUserById
 }
