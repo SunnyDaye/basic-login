@@ -1,3 +1,5 @@
+require('dotenv').config({path:'./../.env'});
+
 const path = require("path");
 const express = require("express");
 const { Client } = require("pg");
@@ -5,7 +7,7 @@ const { CONNECTION_URL } = process.env;
 const queries = require("./queries/queries");
 const app = express();
 const sessions = require("client-sessions");
-const { SECRET } = prcoess.env;
+const { SECRET } = process.env;
 
 const database = new Client({
   connectionString: CONNECTION_URL,
@@ -23,7 +25,8 @@ app.use(express.json());
 app.use(sessions({
   cookieName: "session",
   secret: SECRET,
-  duration: 60 * 1000 //1 minute
+  duration: 60 * 1000 , //1 minute
+  activeDuration: 0
 }));
 
 app.get("/", (req, res) => {
