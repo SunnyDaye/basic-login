@@ -51,6 +51,7 @@
           document.getElementById('floatingPassword').classList.add('is-invalid');
           document.querySelector('.login-form-feedback').innerHTML = data.error;
         }else{
+          console.log('Redirecting to dashboard');
           window.location.replace("/dashboard");
         }
       })

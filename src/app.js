@@ -8,6 +8,7 @@ const queries = require("./queries/queries");
 const app = express();
 const sessions = require("client-sessions");
 const { SECRET } = process.env;
+const bcrypt = require("bcryptjs");
 
 const database = new Client({
   connectionString: CONNECTION_URL,
@@ -25,8 +26,8 @@ app.use(express.json());
 app.use(sessions({
   cookieName: "session",
   secret: SECRET,
-  duration: 60 * 1000 , //1 minute
-  activeDuration: 0
+  duration: 30 * 60 * 1000 , //30 minute
+  activeDuration: 7 * 60 * 1000 //7 minutes
 }));
 
 app.get("/", (req, res) => {
@@ -38,6 +39,7 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/register",  (req, res, next) => {
+  req.body.password = bcrypt.hashSync(req.body.password, 14);
   const values = [...Object.values(req.body)];
   
     database.query(queries.insertUser(values), (err, data) => {
@@ -62,15 +64,16 @@ app.post("/login", (req, res, next) => {
   const {email,password} = req.body;
 
   database.query(queries.getUser(email), (err,data) => {
-    console.log(err,data);
-    if(err || (data && data.rows.length === 0) || (data && password !== data.rows[0].password)){
+  
+    if(err || (data && data.rows.length === 0) || (data && !bcrypt.compareSync(password, data.rows[0].password))){
       next({status: 400, message: "Incorrect username or password"});
     }else{
       req.session.userId = data.rows[0].user_id;
-      res.status(200).json({loginSuccess: true});
+      
     }
+    res.status(200).json({loginSuccess: true});
   });
-    
+  
   
 });
 
@@ -83,13 +86,19 @@ app.get("/dashboard", (req, res, next) => {
         next();
       }
       if(data.rows[0].length === 0){
+        
         res.redirect('/login');
       }else{
-        res.render("dashboard");
+        res.render("dashboard", {user: data.rows[0].first_name});
       }
     });
   }
   
+});
+
+app.get("/logout", (req, res) => {
+  req.session.reset();
+  res.redirect("/");
 });
 
 //TODO: Implement not found handler
